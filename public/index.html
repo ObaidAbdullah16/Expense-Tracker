@@ -82,7 +82,13 @@
       <!-- Expenses Table -->
       <div class="card">
         <div class="card-body">
-          <h5 class="card-title">Your Expenses</h5>
+          <h5 class="card-title">
+            Your Expenses
+            <button class="btn btn-danger btn-sm float-end" id="delete-all-btn">
+              Delete All
+            </button>
+            <!-- ADD THIS -->
+          </h5>
           <div class="table-responsive">
             <table class="table table-striped table-hover">
               <thead class="table-dark">
@@ -91,6 +97,8 @@
                   <th>Description</th>
                   <th>Category</th>
                   <th>Amount (₹)</th>
+                  <th>Action</th>
+                  <!-- ADD THIS LINE -->
                 </tr>
               </thead>
               <tbody id="expenses-table">

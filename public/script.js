@@ -77,6 +77,13 @@ async function loadExpenses() {
         <td>${expense.description}</td>
         <td><span class="badge ${badgeColor}">${expense.category}</span></td>
         <td><strong>₹${parseFloat(expense.amount).toFixed(2)}</strong></td>
+        <td>
+          <button class="btn btn-danger btn-sm" onclick="deleteExpense(${
+            expense.id
+          }, '${expense.description}')">
+            Delete
+          </button>
+        </td>
       `;
 
       table.appendChild(row);
@@ -90,6 +97,52 @@ async function loadExpenses() {
     });
   } catch (error) {
     table.innerHTML =
-      '<tr><td colspan="4" class="text-center text-danger">Failed to load expenses</td></tr>';
+      '<tr><td colspan="5" class="text-center text-danger">Failed to load expenses</td></tr>';
   }
+}
+
+// Delete single expense function
+async function deleteExpense(id, description) {
+  if (confirm(`Delete "${description}"?`)) {
+    try {
+      const response = await fetch(`/api/expenses/${id}`, {
+        method: "DELETE",
+      });
+
+      if (response.ok) {
+        console.log("Deleted successfully");
+        loadExpenses(); // Reload the list
+        alert("✅ Expense deleted!");
+      } else {
+        console.error("Delete failed");
+        alert("❌ Failed to delete");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("❌ Error: " + error.message);
+    }
+  }
+}
+
+// Delete all expenses
+const deleteAllBtn = document.getElementById("delete-all-btn");
+if (deleteAllBtn) {
+  deleteAllBtn.addEventListener("click", async () => {
+    if (confirm("⚠️ Delete ALL expenses?")) {
+      try {
+        const response = await fetch("/api/expenses", {
+          method: "DELETE",
+        });
+
+        if (response.ok) {
+          loadExpenses();
+          alert("✅ All expenses deleted!");
+        } else {
+          alert("❌ Failed to delete all");
+        }
+      } catch (error) {
+        alert("❌ Error: " + error.message);
+      }
+    }
+  });
 }
